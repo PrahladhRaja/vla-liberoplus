@@ -8,11 +8,10 @@ Use one short, lowercase name for your model or study throughout, for example `s
 
 | What | Where | Example (existing TurboVLA work) |
 |---|---|---|
-| Your written summary: what you did, what you found, open questions | `teammates/<your-name>.md` | — |
+| Findings: what was done, what was found, open questions | headline numbers in `docs/findings/RESULTS.md`; method, log and caveats in a `docs/plans/PLAN_<topic>.md` | `docs/plans/PLAN_test1_instruction_leak.md` |
 | Environment / container setup, job scripts for training and evaluation | `cluster/<model>/` with a `README.md` | `cluster/finetune_lp/`, `cluster/liberoplus_container/` |
 | An eval-kit adapter for your model, if you use our kit | `cluster/eval_kit/adapters/<model>.py` | `adapters/turbovla.py` |
 | Scripts for a specific experiment or test | `experiments/<topic>/` | `experiments/robustness/` |
-| Plans and logs of experiments | `docs/plans/PLAN_<topic>.md` | `docs/plans/PLAN_test1_instruction_leak.md` |
 | Per-task results | `results/<model>/<run name>/` | `results/turbovla/lp_eval_ft/` |
 | Written reports or tables | `results/<model>/reports/` | `results/turbovla/reports/` |
 | Changes to someone else's code (LeRobot, openpi, …) | `patches/<project>/` as `git format-patch` files, plus a row in `third_party/VERSIONS.md` with the exact upstream commit | `patches/openvla-oft/` |
@@ -50,6 +49,17 @@ Results only count if they can be compared task by task with everyone else's.
    task with ours, or shown only as a separate reference point.
 4. **Name runs after what they are**, e.g. `lp_eval_<model>` for the full official benchmark and
    `lp_eval_<model>_clean` for clean instructions.
+
+**Putting a model's numbers next to the existing results** (`docs/findings/RESULTS.md`; background in
+`docs/plans/PLAN_smolvla_speed_quality.md`):
+- **Same task set:** all 10,030 tasks, or the same subset on both sides.
+- **Paired tables only when the protocol matches.** Step limits, instructions (official), simulator stack, env seed
+  and trials must match ours; the actions per query may differ, since that's model-specific. Otherwise the model
+  appears as an aggregate reference point, labelled "different protocol".
+- **Latency measured the same way:** A30, batch 1, OFT's sample observation, as in
+  `cluster/oft_container/turbovla_latency.py`. Also report time per executed action.
+- **Exact checkpoints:** name the Hugging Face id and revision. For SmolVLA, use the 450M `lerobot/smolvla_libero`,
+  not the older ~605M `HuggingFaceVLA/smolvla_libero`.
 
 ## 3. Never commit
 - **Model weights or checkpoints** (`.pth`, `.pt`, `.safetensors`, …). Link to Hugging Face or a Turing path instead.

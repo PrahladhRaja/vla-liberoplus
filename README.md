@@ -29,9 +29,11 @@ Details, sources and caveats: [docs/findings/RESULTS.md](docs/findings/RESULTS.m
 [docs/findings/GAPS.md](docs/findings/GAPS.md).
 
 ## Layout
+To add work to the repo, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 | Folder | Contents |
 |---|---|
-| [`docs/findings/`](docs/findings) | results with sources, methods and glossary, data map, timeline, caveats, teammates' summary |
+| [`docs/findings/`](docs/findings) | results with sources, methods and glossary, data map, timeline, caveats |
 | [`docs/plans/`](docs/plans) | plans and logs of the robustness tests and reference runs |
 | [`docs/oft_reference.md`](docs/oft_reference.md) | OpenVLA-OFT/OFT+ setup, baselines and latency |
 | [`docs/turing/`](docs/turing) | Turing rules for coding agents, first-session checklist |
@@ -41,7 +43,6 @@ Details, sources and caveats: [docs/findings/RESULTS.md](docs/findings/RESULTS.m
 | [`results/`](results) | per-task results of every run ([format](results/README.md)) |
 | [`patches/`](patches) | our changes to TurboVLA and OpenVLA-OFT |
 | [`third_party/VERSIONS.md`](third_party/VERSIONS.md) | pinned upstream commits, model revisions and data |
-| [`teammates/`](teammates) | teammates' work ([how to add yours](CONTRIBUTING.md)) |
 
 ## Running on Turing
 Turing is a shared cluster. Read [docs/turing/AGENTS.md](docs/turing/AGENTS.md) and the

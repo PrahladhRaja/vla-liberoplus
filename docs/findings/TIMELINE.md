@@ -13,7 +13,7 @@
 | early Nov | TurboVLA A30 latency benchmark: 30.7 ms per query, 2.56 ms per action, 0.43 GB (job 2471859) | `docs/oft_reference.md` |
 | 11-09 | Instruction leak confirmed in the LIBERO-Plus source (8,493 of 10,030 tasks), after a teammate's observation with SmolVLA. Test 1 (leak) and test 2 (deblur front end) planned | `docs/plans/PLAN_test1_*.md`, `PLAN_test2_*.md` |
 | 11-10 | Test 1 stage A (1,000 tasks): fine-tuned TurboVLA +15.9. Stage B submitted. Original OFT reference runs submitted | `PLAN_test1_*.md` §7, `PLAN_oft_libero_reference.md` |
-| 11-11 | Test 1 stage B: fine-tuned TurboVLA **+15.6 → ≈ 82.1 % clean**. Released TurboVLA +15.1. Original OFT: LIBERO-Plus **68.7 %** (paper 69.6), standard 96.1, leak +3.0 | `docs/plans/PLAN_test1_*.md`, `docs/findings/TEAMMATES.md` |
+| 11-11 | Test 1 stage B: fine-tuned TurboVLA **+15.6 → ≈ 82.1 % clean**. Released TurboVLA +15.1. Original OFT: LIBERO-Plus **68.7 %** (paper 69.6), standard 96.1, leak +3.0 | `docs/plans/PLAN_test1_*.md` |
 | 11-14 | Video reruns for slides (jobs 2519596, 2519790). Progress deck | `experiments/robustness/vid_*.sh` |
 | 11-21 | Reference pack written; OFT+ clean-instruction (all 8,493 affected tasks), rerun and seed-7 runs submitted (jobs 2563982–84, 2564221/2); repo `vla-liberoplus` built | `docs/findings/`, `experiments/robustness/gapfill_*` |
 

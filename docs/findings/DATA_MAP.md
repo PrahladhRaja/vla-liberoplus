@@ -44,7 +44,6 @@ Eval logs, server logs and videos stay on Turing.
 | `docs/findings/METHODS.md` | benchmarks, models, protocol, fine-tuning recipe, test 1 design, glossary |
 | `docs/findings/GAPS.md` | caveats, open questions, unrun plans |
 | `docs/findings/TIMELINE.md` | dated chronology |
-| `docs/findings/TEAMMATES.md` | teammates' work summary and comparability rules |
 | `docs/oft_reference.md` | OFT+/OFT setup, baselines and latency |
 | `docs/plans/PLAN_*.md` | test 1 (instruction leak), test 2 (deblur front end, not run), original-OFT reference, SmolVLA comparison |
 | `results/turbovla/reports/*.md` | TurboVLA reports: Turing vs desktop, released vs fine-tuned (summary + detailed), step 10k vs 17.5k, standard LIBERO |
