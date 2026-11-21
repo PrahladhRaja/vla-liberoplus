@@ -1,0 +1,6 @@
+{"suite": "libero_10", "task_id": 2193, "success": true, "seconds": 20.0, "time": "2026-11-11 16:05:07"}
+{"suite": "libero_10", "task_id": 1049, "success": false, "seconds": 85.7, "time": "2026-11-11 16:06:33"}
+{"suite": "libero_10", "task_id": 621, "success": false, "seconds": 88.8, "time": "2026-11-11 16:08:01"}
+{"suite": "libero_10", "task_id": 139, "success": true, "seconds": 46.9, "time": "2026-11-11 16:08:48"}
+{"suite": "libero_10", "task_id": 2281, "success": true, "seconds": 42.9, "time": "2026-11-11 16:09:31"}
+{"suite": "libero_10", "task_id": 351, "success": false, "seconds": 88.0, "time": "2026-11-11 16:10:59"}

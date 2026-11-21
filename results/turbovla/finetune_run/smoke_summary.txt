@@ -1,0 +1,2 @@
+smoke test 2026-10-21 23:25:52: 1.235 steps/s on 2 A30s, loss (20-step avg) 0.06853, peak GPU memory 13691 MiB,
+checkpoint size 2G; 1 epoch (17500 steps) ~ 3.9 h

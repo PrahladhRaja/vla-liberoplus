@@ -1,0 +1,57 @@
+{
+  "script": "turbovla_libero_evaluation",
+  "ckpt_path": "/home/<user>/turing-vla/TurboVLA/pretrained/TurboVLA/checkpoints/libero/turbovla_libero.pth",
+  "task_suite_name": "libero_10",
+  "requested_task_ids": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "num_trials_per_task": 50,
+  "num_open_loop_steps": 12,
+  "seed": 7,
+  "precision": "bf16",
+  "dinov3_output_hidden_states": true,
+  "tasks": [
+    {
+      "task_id": 5,
+      "task_description": "pick up the book and place it in the back compartment of the caddy",
+      "episodes": 50,
+      "successes": 44,
+      "success_rate": 0.88
+    },
+    {
+      "task_id": 6,
+      "task_description": "put the white mug on the plate and put the chocolate pudding to the right of the plate",
+      "episodes": 50,
+      "successes": 46,
+      "success_rate": 0.92
+    },
+    {
+      "task_id": 7,
+      "task_description": "put both the alphabet soup and the cream cheese box in the basket",
+      "episodes": 50,
+      "successes": 49,
+      "success_rate": 0.98
+    },
+    {
+      "task_id": 8,
+      "task_description": "put both moka pots on the stove",
+      "episodes": 50,
+      "successes": 27,
+      "success_rate": 0.54
+    },
+    {
+      "task_id": 9,
+      "task_description": "put the yellow and white mug in the microwave and close it",
+      "episodes": 50,
+      "successes": 44,
+      "success_rate": 0.88
+    }
+  ],
+  "total_episodes": 250,
+  "total_successes": 210,
+  "overall_success_rate": 0.84
+}

@@ -1,0 +1,50 @@
+{
+ "checkpoint": "/scratch/<user>/ckpts/oft_libero",
+ "load_in_8bit": false,
+ "warmup": 50,
+ "iters": 300,
+ "batch": 1,
+ "end_to_end": {
+  "median_ms": 139.6396179916337,
+  "p95_ms": 140.5633416317869,
+  "mean_ms": 139.62192087434232,
+  "n": 300
+ },
+ "vision": {
+  "median_ms": 26.605567932128906,
+  "p95_ms": 27.16784610748291,
+  "mean_ms": 26.73759573618571,
+  "n": 300
+ },
+ "projector": {
+  "median_ms": 0.7997440099716187,
+  "p95_ms": 0.8191999793052673,
+  "mean_ms": 0.8011537045240402,
+  "n": 300
+ },
+ "llm": {
+  "median_ms": 98.87641906738281,
+  "p95_ms": 99.65081596374512,
+  "mean_ms": 98.87496198018393,
+  "n": 300
+ },
+ "llm_seq_len": 605,
+ "llm_flops": {
+  "per_layer_gflops": 250.87090688,
+  "num_layers": 32,
+  "all_layers_gflops": 8027.86902016,
+  "lm_head_gflops": 158.91431424
+ },
+ "attn_implementation": "sdpa",
+ "attn_class": "LlamaSdpaAttention",
+ "peak_gpu_mem_gb": 14.97670030593872,
+ "action_chunk_shape": [
+  8,
+  7
+ ],
+ "gpu": "NVIDIA A30",
+ "torch": "2.2.0+cu121",
+ "cuda": "12.1",
+ "python": "3.10.17",
+ "transformers": "4.40.1"
+}

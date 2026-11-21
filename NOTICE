@@ -1,0 +1,18 @@
+vla-liberoplus
+Copyright 2026 the vla-liberoplus contributors
+
+This project is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It builds on the following projects, which are not redistributed here except as noted:
+
+- TurboVLA (https://github.com/H-EmbodVis/TurboVLA), Apache License 2.0.
+  patches/TurboVLA/ contains a modification of TurboVLA source code.
+- OpenVLA-OFT (https://github.com/moojink/openvla-oft), MIT License,
+  Copyright (c) 2025 Moo Jin Kim, Chelsea Finn, Percy Liang.
+  patches/openvla-oft/ contains modifications of OpenVLA-OFT source code; see
+  patches/openvla-oft/LICENSE-openvla-oft-MIT.
+- LIBERO (https://github.com/Lifelong-Robot-Learning/LIBERO), MIT License.
+- LIBERO-Plus (https://github.com/sylvestf/LIBERO-plus). No license is declared; no LIBERO-Plus code is included.
+- DINOv3 (Meta). TurboVLA's checkpoints contain DINOv3-derived parameters, distributed under the DINOv3 License.
+
+See THIRD_PARTY_LICENSES.md for the models and datasets used.

@@ -1,0 +1,4 @@
+model,params,ms_per_query_A30_batch1,actions_per_query,ms_per_executed_action,peak_gpu_gb,source
+OpenVLA-OFT,7.5B,139.6,8,17.5,~15,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT+,7.5B,143.3,8,17.9,15.0,docs/oft_reference.md (141.7 in a later bench)
+TurboVLA fine-tuned,216M,30.7,12,2.56,0.43,docs/oft_reference.md (job 2471859)

@@ -1,0 +1,12 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+# Small helper image for unpacking the LIBERO-Plus training data (split zip). Kept separate from liberoplus.sif so the
+# training/eval image stays identical to the one the baseline was evaluated with.
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    # Rootless build: apt can't drop privileges to the _apt user.
+    echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/99-no-sandbox-user
+    apt-get update
+    apt-get install -y --no-install-recommends p7zip-full zip unzip
+    rm -rf /var/lib/apt/lists/*

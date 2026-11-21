@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Model weights and checkpoints: never commit (see CONTRIBUTING.md)
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.sif
+*.sqfs
+
+# Videos and media from rollouts
+*.mp4
+*.gif
+videos/
+rollouts/
+
+# Eval and job logs (results*.jsonl, plan.tsv, summary.txt and config.sh are what we keep)
+*.log
+logs/
+gpu_*.csv
+current*.json
+progress*.json
+
+# Archives and bundles
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# Office documents (slides are not tracked)
+*.pptx
+*.docx
+
+# Local scratch
+.DS_Store
+*.swp
+.env

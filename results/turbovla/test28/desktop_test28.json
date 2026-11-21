@@ -1,0 +1,118 @@
+{
+"libero_10 2": {
+"success": false,
+"seconds": 40.4
+},
+"libero_10 696": {
+"success": false,
+"seconds": 25.9
+},
+"libero_10 1404": {
+"success": true,
+"seconds": 13.5
+},
+"libero_10 2334": {
+"success": true,
+"seconds": 19.4
+},
+"libero_10 2099": {
+"success": true,
+"seconds": 16.8
+},
+"libero_10 607": {
+"success": false,
+"seconds": 43.3
+},
+"libero_10 1685": {
+"success": false,
+"seconds": 151.1
+},
+"libero_goal 187": {
+"success": false,
+"seconds": 30.0
+},
+"libero_goal 774": {
+"success": false,
+"seconds": 31.3
+},
+"libero_goal 1165": {
+"success": false,
+"seconds": 29.6
+},
+"libero_goal 2367": {
+"success": false,
+"seconds": 31.5
+},
+"libero_goal 2145": {
+"success": false,
+"seconds": 32.6
+},
+"libero_goal 656": {
+"success": false,
+"seconds": 30.6
+},
+"libero_goal 1731": {
+"success": true,
+"seconds": 121.7
+},
+"libero_object 83": {
+"success": true,
+"seconds": 9.9
+},
+"libero_object 909": {
+"success": false,
+"seconds": 14.0
+},
+"libero_object 1318": {
+"success": true,
+"seconds": 12.0
+},
+"libero_object 2296": {
+"success": false,
+"seconds": 14.4
+},
+"libero_object 1854": {
+"success": false,
+"seconds": 14.2
+},
+"libero_object 531": {
+"success": false,
+"seconds": 13.9
+},
+"libero_object 1478": {
+"success": false,
+"seconds": 170.5
+},
+"libero_spatial 2209": {
+"success": false,
+"seconds": 24.3
+},
+"libero_spatial 1795": {
+"success": true,
+"seconds": 15.3
+},
+"libero_spatial 68": {
+"success": false,
+"seconds": null
+},
+"libero_spatial 899": {
+"success": false,
+"seconds": null
+},
+"libero_spatial 1016": {
+"success": true,
+"seconds": null
+},
+"libero_spatial 1727": {
+"success": true,
+"seconds": null
+},
+"libero_spatial 318": {
+"success": true,
+"seconds": null
+},
+"libero_spatial 1627": {
+"success": false,
+"seconds": null
+}
+}

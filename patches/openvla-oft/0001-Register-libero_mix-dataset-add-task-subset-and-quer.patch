@@ -1,0 +1,136 @@
+From 5663fee7664d5f4ec1a021c9471834ea808b0a42 Mon Sep 17 00:00:00 2001
+From: Paul Raynes <72121524+psraynes@users.noreply.github.com>
+Date: Thu, 29 Oct 2026 20:36:56 -0400
+Subject: [PATCH 1/2] Register libero_mix dataset; add task subset and query
+ timing to LIBERO eval
+
+- OXE config/transform/mixture entries for libero_mix (LIBERO-Plus mixed training
+  set, same schema as the LIBERO no-noops datasets).
+- run_libero_eval.py: --task_ids to evaluate a subset of a suite's tasks; log the
+  number of model queries and their latency per episode.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ experiments/robot/libero/run_libero_eval.py   | 17 ++++++++++++++++-
+ prismatic/vla/datasets/rlds/oxe/configs.py    |  7 +++++++
+ prismatic/vla/datasets/rlds/oxe/mixtures.py   |  3 +++
+ prismatic/vla/datasets/rlds/oxe/transforms.py |  1 +
+ 4 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/experiments/robot/libero/run_libero_eval.py b/experiments/robot/libero/run_libero_eval.py
+index cdf27f5..14d5786 100644
+--- a/experiments/robot/libero/run_libero_eval.py
++++ b/experiments/robot/libero/run_libero_eval.py
+@@ -8,6 +8,7 @@ import json
+ import logging
+ import os
+ import sys
++import time
+ from collections import deque
+ from dataclasses import dataclass
+ from enum import Enum
+@@ -112,6 +113,7 @@ class GenerateConfig:
+     task_suite_name: str = TaskSuite.LIBERO_SPATIAL  # Task suite
+     num_steps_wait: int = 10                         # Number of steps to wait for objects to stabilize in sim
+     num_trials_per_task: int = 50                    # Number of rollouts per task
++    task_ids: str = ""                               # Comma-separated task ids to run (default: all tasks in the suite)
+     initial_states_path: str = "DEFAULT"             # "DEFAULT", or path to initial states JSON file
+     env_img_res: int = 256                           # Resolution for environment images (not policy input resolution)
+ 
+@@ -312,6 +314,7 @@ def run_episode(
+ 
+     # Run episode
+     success = False
++    query_seconds = []  # wall time of each model query (get_action returns numpy, so GPU work is included)
+     try:
+         while t < max_steps + cfg.num_steps_wait:
+             # Do nothing for the first few timesteps to let objects stabilize
+@@ -327,6 +330,7 @@ def run_episode(
+             # If action queue is empty, requery model
+             if len(action_queue) == 0:
+                 # Query model to get action
++                query_start = time.perf_counter()
+                 actions = get_action(
+                     cfg,
+                     model,
+@@ -338,6 +342,7 @@ def run_episode(
+                     noisy_action_projector=noisy_action_projector,
+                     use_film=cfg.use_film,
+                 )
++                query_seconds.append(time.perf_counter() - query_start)
+                 action_queue.extend(actions)
+ 
+             # Get action from queue
+@@ -356,6 +361,14 @@ def run_episode(
+     except Exception as e:
+         log_message(f"Episode error: {e}", log_file)
+ 
++    if query_seconds:
++        later = query_seconds[1:] or query_seconds  # the first query includes one-time CUDA/cuDNN warm-up
++        log_message(
++            f"Model queries: {len(query_seconds)}, first {query_seconds[0] * 1000:.1f} ms, "
++            f"median of the rest {np.median(later) * 1000:.1f} ms",
++            log_file,
++        )
++
+     return success, replay_images
+ 
+ 
+@@ -485,7 +498,9 @@ def eval_libero(cfg: GenerateConfig) -> float:
+ 
+     # Start evaluation
+     total_episodes, total_successes = 0, 0
+-    for task_id in tqdm.tqdm(range(num_tasks)):
++    task_ids = [int(t) for t in cfg.task_ids.split(",") if t.strip()] if cfg.task_ids else list(range(num_tasks))
++    assert all(0 <= t < num_tasks for t in task_ids), f"task_ids must be in [0, {num_tasks})"
++    for task_id in tqdm.tqdm(task_ids):
+         total_episodes, total_successes = run_task(
+             cfg,
+             task_suite,
+diff --git a/prismatic/vla/datasets/rlds/oxe/configs.py b/prismatic/vla/datasets/rlds/oxe/configs.py
+index 3222e02..08bd521 100644
+--- a/prismatic/vla/datasets/rlds/oxe/configs.py
++++ b/prismatic/vla/datasets/rlds/oxe/configs.py
+@@ -670,6 +670,13 @@ OXE_DATASET_CONFIGS = {
+         "state_encoding": StateEncoding.POS_EULER,
+         "action_encoding": ActionEncoding.EEF_POS,
+     },
++    "libero_mix": {  # LIBERO-Plus mixed training set (HF Sylvest/libero_plus_rlds), same schema as LIBERO
++        "image_obs_keys": {"primary": "image", "secondary": None, "wrist": "wrist_image"},
++        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
++        "state_obs_keys": ["EEF_state", "gripper_state"],
++        "state_encoding": StateEncoding.POS_EULER,
++        "action_encoding": ActionEncoding.EEF_POS,
++    },
+     "libero_4_task_suites_no_noops": {
+         "image_obs_keys": {"primary": "image", "secondary": None, "wrist": "wrist_image"},
+         "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+diff --git a/prismatic/vla/datasets/rlds/oxe/mixtures.py b/prismatic/vla/datasets/rlds/oxe/mixtures.py
+index c5a2862..8040389 100644
+--- a/prismatic/vla/datasets/rlds/oxe/mixtures.py
++++ b/prismatic/vla/datasets/rlds/oxe/mixtures.py
+@@ -206,6 +206,9 @@ OXE_NAMED_MIXTURES: Dict[str, List[Tuple[str, float]]] = {
+     "libero_10_no_noops": [
+         ("libero_10_no_noops", 1.0),
+     ],
++    "libero_mix": [
++        ("libero_mix", 1.0),
++    ],
+     "libero_4_task_suites_no_noops": [
+         ("libero_spatial_no_noops", 1.0),
+         ("libero_object_no_noops", 1.0),
+diff --git a/prismatic/vla/datasets/rlds/oxe/transforms.py b/prismatic/vla/datasets/rlds/oxe/transforms.py
+index bf848e9..fc88ad0 100644
+--- a/prismatic/vla/datasets/rlds/oxe/transforms.py
++++ b/prismatic/vla/datasets/rlds/oxe/transforms.py
+@@ -925,6 +925,7 @@ OXE_STANDARDIZATION_TRANSFORMS = {
+     "libero_goal_no_noops": libero_dataset_transform,
+     "libero_10_no_noops": libero_dataset_transform,
+     "libero_4_task_suites_no_noops": libero_dataset_transform,
++    "libero_mix": libero_dataset_transform,
+     ### ALOHA fine-tuning datasets
+     "aloha1_fold_shorts_20_demos": aloha_dataset_transform,
+     "aloha1_fold_shirt_30_demos": aloha_dataset_transform,
+-- 
+2.43.0
+

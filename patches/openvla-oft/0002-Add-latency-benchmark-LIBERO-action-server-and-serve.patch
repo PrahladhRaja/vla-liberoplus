@@ -1,0 +1,372 @@
+From 37090ebc7731b5e0e8059c1feb25fae4f1458fad Mon Sep 17 00:00:00 2001
+From: Paul Raynes <72121524+psraynes@users.noreply.github.com>
+Date: Thu, 29 Oct 2026 20:57:12 -0400
+Subject: [PATCH 2/2] Add latency benchmark, LIBERO action server and server
+ equivalence check
+
+- experiments/robot/bench_latency.py: batch-1 benchmark on the sample LIBERO
+  observation (end-to-end, vision, projector, LLM via CUDA events), analytic LLM
+  FLOPs, peak memory, versions -> JSON.
+- experiments/robot/libero/oft_libero_server.py: HTTP server answering raw LIBERO
+  observations with run_libero_eval.py's own prepare_observation/get_action/
+  process_action, for the LIBERO-Plus eval kit (one model process per GPU).
+- experiments/robot/libero/check_server.py: checks the HTTP path returns action
+  chunks identical to the in-process path on a real episode.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ experiments/robot/bench_latency.py            | 139 ++++++++++++++++++
+ experiments/robot/libero/check_server.py      |  86 +++++++++++
+ experiments/robot/libero/oft_libero_server.py | 101 +++++++++++++
+ 3 files changed, 326 insertions(+)
+ create mode 100644 experiments/robot/bench_latency.py
+ create mode 100644 experiments/robot/libero/check_server.py
+ create mode 100644 experiments/robot/libero/oft_libero_server.py
+
+diff --git a/experiments/robot/bench_latency.py b/experiments/robot/bench_latency.py
+new file mode 100644
+index 0000000..c6a7edd
+--- /dev/null
++++ b/experiments/robot/bench_latency.py
+@@ -0,0 +1,139 @@
++"""
++bench_latency.py
++
++Controlled inference benchmark for OpenVLA-OFT on LIBERO inputs: batch 1, a fixed
++observation (experiments/robot/libero/sample_libero_spatial_observation.pkl), N warm-up then M timed queries.
++
++Reports median / p95 / mean (ms) for
++  - end_to_end: get_action() as run_libero_eval.py calls it (preprocessing, vision, LLM, action head, un-normalize;
++                returns numpy, so the GPU work is synchronized)
++  - vision:     vision_backbone forward            (CUDA events)
++  - projector:  projector forward                  (CUDA events)
++  - llm:        language_model forward             (CUDA events; Llama-2 layers + final norm + lm_head)
++plus the LLM sequence length, analytic LLM FLOPs (per decoder layer, all layers, lm_head), peak GPU memory and the
++software/GPU versions. Writes a JSON file.
++
++    python experiments/robot/bench_latency.py --pretrained_checkpoint <dir> --out bench.json
++"""
++
++import argparse
++import copy
++import json
++import os
++import pickle
++import platform
++import sys
++import time
++
++import numpy as np
++import torch
++
++sys.argv.append("libero")  # select LIBERO constants in prismatic.vla.constants (as the eval/finetune scripts do)
++
++from experiments.robot.libero.run_libero_eval import GenerateConfig, initialize_model  # noqa: E402
++from experiments.robot.robot_utils import get_action  # noqa: E402
++
++HERE = os.path.dirname(os.path.abspath(__file__))
++
++
++def stats(xs):
++    a = np.asarray(xs) * 1000.0
++    return {"median_ms": float(np.median(a)), "p95_ms": float(np.percentile(a, 95)), "mean_ms": float(a.mean()), "n": len(a)}
++
++
++def llm_flops(cfg_text, seq_len):
++    """Analytic forward FLOPs of the Llama decoder (2 FLOPs per multiply-add)."""
++    d, f, v = cfg_text.hidden_size, cfg_text.intermediate_size, cfg_text.vocab_size
++    kv = d * cfg_text.num_key_value_heads // cfg_text.num_attention_heads
++    proj = 2 * seq_len * (2 * d * d + 2 * d * kv)   # q, o (d x d) and k, v (d x kv)
++    mlp = 2 * seq_len * 3 * d * f                  # gate, up, down
++    attn = 2 * 2 * seq_len * seq_len * d           # QK^T and AV
++    per_layer = proj + mlp + attn
++    return {"per_layer_gflops": per_layer / 1e9, "num_layers": cfg_text.num_hidden_layers,
++            "all_layers_gflops": per_layer * cfg_text.num_hidden_layers / 1e9,
++            "lm_head_gflops": 2 * seq_len * d * v / 1e9}
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--pretrained_checkpoint", required=True)
++    ap.add_argument("--unnorm_key", default="libero_spatial")
++    ap.add_argument("--warmup", type=int, default=100)
++    ap.add_argument("--iters", type=int, default=500)
++    ap.add_argument("--load_in_8bit", action="store_true")
++    ap.add_argument("--out", required=True)
++    args, _ = ap.parse_known_args()
++
++    cfg = GenerateConfig(
++        pretrained_checkpoint=args.pretrained_checkpoint, task_suite_name=args.unnorm_key,
++        use_l1_regression=True, use_diffusion=False, use_film=False, num_images_in_input=2, use_proprio=True,
++        center_crop=True, load_in_8bit=args.load_in_8bit,
++    )
++    torch.manual_seed(7)
++    model, action_head, proprio_projector, noisy_action_projector, processor = initialize_model(cfg)
++    obs0 = pickle.load(open(os.path.join(HERE, "libero", "sample_libero_spatial_observation.pkl"), "rb"))
++
++    # CUDA-event timers on module forwards; also capture the LLM sequence length.
++    timers, current, seq = {}, {}, {}
++
++    def add_timer(name, module):
++        def pre(mod, args, kwargs):
++            ev = torch.cuda.Event(enable_timing=True)
++            ev.record()
++            current[name] = ev
++            if name == "llm":
++                emb = kwargs.get("inputs_embeds")
++                seq["len"] = int(emb.shape[1]) if emb is not None else int(kwargs["input_ids"].shape[1])
++
++        def post(mod, args, kwargs, out):
++            ev = torch.cuda.Event(enable_timing=True)
++            ev.record()
++            timers.setdefault(name, []).append((current.pop(name), ev))
++
++        module.register_forward_pre_hook(pre, with_kwargs=True)
++        module.register_forward_hook(post, with_kwargs=True)
++
++    add_timer("vision", model.vision_backbone)
++    add_timer("projector", model.projector)
++    add_timer("llm", model.language_model)
++
++    def query():
++        obs = copy.deepcopy(obs0)  # get_vla_action normalizes obs["state"] in place
++        return get_action(cfg, model, obs, obs["task_description"], processor=processor, action_head=action_head,
++                          proprio_projector=proprio_projector, noisy_action_projector=noisy_action_projector,
++                          use_film=False)
++
++    for _ in range(args.warmup):
++        query()
++    torch.cuda.synchronize()
++    timers.clear()
++    torch.cuda.reset_peak_memory_stats()
++    e2e, actions = [], None
++    for _ in range(args.iters):
++        t0 = time.perf_counter()
++        actions = query()
++        e2e.append(time.perf_counter() - t0)
++    torch.cuda.synchronize()
++
++    result = {
++        "checkpoint": args.pretrained_checkpoint, "load_in_8bit": args.load_in_8bit,
++        "warmup": args.warmup, "iters": args.iters, "batch": 1,
++        "end_to_end": stats(e2e),
++        **{k: stats([a.elapsed_time(b) / 1000.0 for a, b in v]) for k, v in timers.items()},
++        "llm_seq_len": seq.get("len"),
++        "llm_flops": llm_flops(model.language_model.config, seq.get("len", 0)),
++        "attn_implementation": model.language_model.config._attn_implementation,
++        "attn_class": type(model.language_model.model.layers[0].self_attn).__name__,
++        "peak_gpu_mem_gb": torch.cuda.max_memory_allocated() / 2**30,
++        "action_chunk_shape": list(np.asarray(actions).shape),
++        "gpu": torch.cuda.get_device_name(0), "torch": torch.__version__,
++        "cuda": torch.version.cuda, "python": platform.python_version(),
++    }
++    import transformers
++    result["transformers"] = transformers.__version__
++    json.dump(result, open(args.out, "w"), indent=1)
++    print(json.dumps(result, indent=1))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/robot/libero/check_server.py b/experiments/robot/libero/check_server.py
+new file mode 100644
+index 0000000..d2d80fd
+--- /dev/null
++++ b/experiments/robot/libero/check_server.py
+@@ -0,0 +1,86 @@
++"""
++check_server.py
++
++Equivalence test for oft_libero_server.py + the eval kit's openvla_oft adapter.
++Loads OFT once, serves it over HTTP from a background thread, runs one real LIBERO(-Plus) episode with actions from the
++HTTP path, and at every query compares them with a direct in-process call on the same observation. Passes if every
++chunk is identical (max |diff| == 0).
++
++    python experiments/robot/libero/check_server.py --pretrained_checkpoint <dir> --kit_dir <eval kit> [--queries 30]
++"""
++
++import argparse
++import sys
++import threading
++import time
++
++import numpy as np
++
++sys.argv.append("libero")
++
++from libero.libero import benchmark  # noqa: E402
++
++from experiments.robot.libero.libero_utils import get_libero_dummy_action, get_libero_env  # noqa: E402
++from experiments.robot.libero.oft_libero_server import OFTLiberoPolicy, make_app  # noqa: E402
++from experiments.robot.libero.run_libero_eval import GenerateConfig  # noqa: E402
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--pretrained_checkpoint", required=True)
++    ap.add_argument("--kit_dir", required=True)
++    ap.add_argument("--suite", default="libero_spatial")
++    ap.add_argument("--task_id", type=int, default=0)
++    ap.add_argument("--queries", type=int, default=30)
++    ap.add_argument("--port", type=int, default=8790)
++    args, _ = ap.parse_known_args()
++
++    cfg = GenerateConfig(pretrained_checkpoint=args.pretrained_checkpoint, task_suite_name=args.suite,
++                         use_l1_regression=True, use_diffusion=False, use_film=False, num_images_in_input=2,
++                         use_proprio=True, center_crop=True)
++    policy = OFTLiberoPolicy(cfg)
++
++    import uvicorn
++
++    server = uvicorn.Server(uvicorn.Config(make_app(policy), host="127.0.0.1", port=args.port, log_level="warning"))
++    threading.Thread(target=server.run, daemon=True).start()
++
++    import os
++
++    sys.path.insert(0, args.kit_dir)
++    os.environ["OFT_SERVER_URL"] = f"http://127.0.0.1:{args.port}"
++    from adapters.openvla_oft import OpenVLAOFTAdapter
++
++    adapter = OpenVLAOFTAdapter()
++
++    task_suite = benchmark.get_benchmark_dict()[args.suite]()
++    task = task_suite.get_task(args.task_id)
++    env, description = get_libero_env(task, cfg.model_family, resolution=256)
++    env.reset()
++    obs = env.set_init_state(task_suite.get_task_init_states(args.task_id)[0])
++    for _ in range(10):
++        obs, _, _, _ = env.step(get_libero_dummy_action(cfg.model_family))
++
++    max_diff, n, done, t_http = 0.0, 0, False, []
++    while n < args.queries and not done:
++        t0 = time.perf_counter()
++        via_http = adapter.predict(obs, task.language)
++        t_http.append(time.perf_counter() - t0)
++        direct = policy.act(obs, task.language)
++        assert via_http.shape == direct.shape, (via_http.shape, direct.shape)
++        max_diff = max(max_diff, float(np.abs(via_http - direct).max()))
++        n += 1
++        for a in via_http:
++            obs, _, done, _ = env.step(a.tolist())
++            if done:
++                break
++    print(f"task: {task.language}")
++    print(f"queries compared: {n}, chunk shape {via_http.shape}, episode done: {done}")
++    print(f"HTTP query median {np.median(t_http[1:] or t_http) * 1000:.1f} ms")
++    print(f"max |HTTP - direct| = {max_diff}")
++    print("RESULT:", "server path identical to in-process path" if max_diff == 0 else "server path DIFFERS")
++    sys.exit(0 if max_diff == 0 else 1)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/robot/libero/oft_libero_server.py b/experiments/robot/libero/oft_libero_server.py
+new file mode 100644
+index 0000000..0267069
+--- /dev/null
++++ b/experiments/robot/libero/oft_libero_server.py
+@@ -0,0 +1,101 @@
++"""
++oft_libero_server.py
++
++HTTP server that answers LIBERO action queries with OpenVLA-OFT. It lets one model
++process per GPU serve several CPU environment workers (the LIBERO-Plus eval kit).
++
++Each request is handled with run_libero_eval.py's own functions, so preprocessing and action post-processing are
++identical to OFT's evaluation:
++    raw LIBERO obs -> prepare_observation() -> get_action() -> process_action() per action -> (chunk, 7) array
++Requests are served one at a time (a lock around the model).
++
++    POST /act     {"obs": {"agentview_image", "robot0_eye_in_hand_image", "robot0_eef_pos", "robot0_eef_quat",
++                           "robot0_gripper_qpos"}, "instruction": str}  -> json_numpy array (chunk, 7)
++    GET  /health  -> {"ok": true, "queries": n}
++
++    python experiments/robot/libero/oft_libero_server.py --pretrained_checkpoint <dir> --port 8777
++"""
++
++import json_numpy
++
++json_numpy.patch()
++
++import argparse  # noqa: E402
++import sys  # noqa: E402
++import threading  # noqa: E402
++from typing import Any, Dict  # noqa: E402
++
++import numpy as np  # noqa: E402
++
++sys.argv.append("libero")  # select LIBERO constants in prismatic.vla.constants
++
++from experiments.robot.libero.run_libero_eval import (  # noqa: E402
++    GenerateConfig,
++    initialize_model,
++    prepare_observation,
++    process_action,
++)
++from experiments.robot.robot_utils import get_action, get_image_resize_size  # noqa: E402
++
++OBS_KEYS = ("agentview_image", "robot0_eye_in_hand_image", "robot0_eef_pos", "robot0_eef_quat", "robot0_gripper_qpos")
++
++
++class OFTLiberoPolicy:
++    """Loads the model once; act() maps one raw LIBERO observation + instruction to an executable action chunk."""
++
++    def __init__(self, cfg: GenerateConfig):
++        self.cfg = cfg
++        (self.model, self.action_head, self.proprio_projector,
++         self.noisy_action_projector, self.processor) = initialize_model(cfg)  # also sets cfg.unnorm_key
++        self.resize_size = get_image_resize_size(cfg)
++        self.lock = threading.Lock()
++        self.queries = 0
++
++    def act(self, obs: dict, instruction: str) -> np.ndarray:
++        observation, _ = prepare_observation(obs, self.resize_size)
++        with self.lock:
++            actions = get_action(self.cfg, self.model, observation, instruction, processor=self.processor,
++                                 action_head=self.action_head, proprio_projector=self.proprio_projector,
++                                 noisy_action_projector=self.noisy_action_projector, use_film=self.cfg.use_film)
++            self.queries += 1
++        return np.stack([process_action(np.asarray(a), self.cfg.model_family) for a in actions]).astype(np.float64)
++
++
++def make_app(policy: OFTLiberoPolicy):
++    from fastapi import FastAPI
++    from fastapi.responses import JSONResponse
++
++    app = FastAPI()
++
++    @app.post("/act")
++    def act(payload: Dict[str, Any]):  # same body type as vla-scripts/deploy.py
++        obs = {k: np.asarray(payload["obs"][k]) for k in OBS_KEYS}
++        return JSONResponse(json_numpy.dumps(policy.act(obs, payload["instruction"])))
++
++    @app.get("/health")
++    def health():
++        return {"ok": True, "queries": policy.queries}
++
++    return app
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--pretrained_checkpoint", required=True)
++    ap.add_argument("--unnorm_key", default="libero_spatial")  # OFT+ stores the same mix stats under all 4 suites
++    ap.add_argument("--host", default="127.0.0.1")
++    ap.add_argument("--port", type=int, default=8777)
++    args, _ = ap.parse_known_args()
++    cfg = GenerateConfig(
++        pretrained_checkpoint=args.pretrained_checkpoint, task_suite_name=args.unnorm_key,
++        use_l1_regression=True, use_diffusion=False, use_film=False, num_images_in_input=2, use_proprio=True,
++        center_crop=True,
++    )
++    policy = OFTLiberoPolicy(cfg)
++    import uvicorn
++
++    uvicorn.run(make_app(policy), host=args.host, port=args.port, log_level="warning")
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.43.0
+

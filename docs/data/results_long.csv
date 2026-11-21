@@ -1,0 +1,89 @@
+model,benchmark,instructions,slice_type,slice,success_pct,source
+OpenVLA-OFT,LIBERO-Plus,official,category,Camera,55.9,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Robot,23.9,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Language,84.8,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Light,92.9,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Background,87.1,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Noise,74.8,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,Layout,73.9,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,category,All,68.7,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Camera,95.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Robot,28.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Language,85.7,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Light,94.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Background,96.4,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Noise,94.9,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,Layout,75.2,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,category,All,80.5,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Camera,92.8,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Robot,30.3,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Language,85.8,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Light,94.9,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Background,93.9,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Noise,89.3,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,Layout,77.6,LIBERO-Plus paper Table 2
+OpenVLA-OFT+ (paper),LIBERO-Plus,official,category,All,79.6,LIBERO-Plus paper Table 2
+TurboVLA released,LIBERO-Plus,official,category,Camera,23.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Robot,33.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Language,67.9,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Light,67.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Background,47.7,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Noise,31.5,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,Layout,54.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,category,All,45.5,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Camera,72.5,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Robot,40.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Language,73.1,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Light,85.0,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Background,80.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Noise,73.1,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,Layout,65.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,official,category,All,68.9,results/turbovla/reports/lp_eval_ft_vs_baseline.md; docs/oft_reference.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Camera,92.2,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Robot,53.8,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Language,73.1,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Light,95.3,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Background,95.1,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Noise,96.3,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,Layout,75.4,docs/plans/PLAN_test1_instruction_leak.md
+TurboVLA fine-tuned,LIBERO-Plus,clean,category,All,82.1,docs/plans/PLAN_test1_instruction_leak.md
+OpenVLA-OFT,LIBERO-Plus,official,suite,libero_spatial,75.3,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,suite,libero_object,75.7,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,suite,libero_goal,57.9,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,suite,libero_10,66.5,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO-Plus,official,suite,All,68.7,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,suite,libero_spatial,84.8,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,suite,libero_object,83.7,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,suite,libero_goal,72.3,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,suite,libero_10,81.5,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO-Plus,official,suite,All,80.5,docs/oft_reference.md
+TurboVLA released,LIBERO-Plus,official,suite,libero_spatial,52.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA released,LIBERO-Plus,official,suite,libero_object,58.6,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA released,LIBERO-Plus,official,suite,libero_goal,25.2,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA released,LIBERO-Plus,official,suite,libero_10,46.7,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA released,LIBERO-Plus,official,suite,All,45.5,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA fine-tuned,LIBERO-Plus,official,suite,libero_spatial,75.6,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA fine-tuned,LIBERO-Plus,official,suite,libero_object,83.8,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA fine-tuned,LIBERO-Plus,official,suite,libero_goal,40.1,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA fine-tuned,LIBERO-Plus,official,suite,libero_10,77.3,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+TurboVLA fine-tuned,LIBERO-Plus,official,suite,All,68.9,results/turbovla/reports/lp_eval_ft_vs_baseline.md
+OpenVLA-OFT,LIBERO,standard,suite,libero_spatial,96.6,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO,standard,suite,libero_object,97.6,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO,standard,suite,libero_goal,95.6,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO,standard,suite,libero_10,94.6,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT,LIBERO,standard,suite,All,96.1,docs/plans/PLAN_oft_libero_reference.md
+OpenVLA-OFT+,LIBERO,standard,suite,libero_spatial,96.8,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO,standard,suite,libero_object,98.4,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO,standard,suite,libero_goal,96.8,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO,standard,suite,libero_10,94.4,docs/oft_reference.md
+OpenVLA-OFT+,LIBERO,standard,suite,All,96.6,docs/oft_reference.md
+TurboVLA released,LIBERO,standard,suite,libero_spatial,95.0,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA released,LIBERO,standard,suite,libero_object,98.2,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA released,LIBERO,standard,suite,libero_goal,95.2,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA released,LIBERO,standard,suite,libero_10,86.6,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA released,LIBERO,standard,suite,All,93.8,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA fine-tuned,LIBERO,standard,suite,libero_spatial,97.4,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA fine-tuned,LIBERO,standard,suite,libero_object,99.6,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA fine-tuned,LIBERO,standard,suite,libero_goal,96.2,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA fine-tuned,LIBERO,standard,suite,libero_10,93.0,results/turbovla/reports/libero_std_released_vs_finetuned.md
+TurboVLA fine-tuned,LIBERO,standard,suite,All,96.5,results/turbovla/reports/libero_std_released_vs_finetuned.md

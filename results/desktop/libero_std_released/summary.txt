@@ -1,0 +1,5 @@
+libero_spatial    93.2  (paper  97.0)  tasks: 94 92 98 94 92 82 100 98 84 98
+libero_object     99.6  (paper 100.0)  tasks: 100 100 100 98 98 100 100 100 100 100
+libero_goal       96.2  (paper  98.2)  tasks: 100 100 100 88 98 98 94 100 94 90
+libero_10         86.2  (paper  95.2)  tasks: 78 100 86 82 94 94 84 100 56 88
+average           93.8  (paper  97.6)  1876/2000
