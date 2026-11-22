@@ -14,7 +14,7 @@ Point: compare the small VLAs with a large one on the same benchmark, GPU and la
 | OpenVLA-OFT / OFT+ | 68.7 / 80.5 | 0 | 96.1 / 96.6 | 139.6 / 143.3 ms per 8-action chunk |
 | TurboVLA released / fine-tuned | 45.5 / 68.9 | 7 | 93.8 / 96.5 | 30.7 ms per 12-action chunk (fine-tuned; same arch as released) |
 | TurboVLA fine-tuned, clean instructions | ≈ 82.1 (test 1 stage B) | 7 | — | same |
-| OFT+, clean instructions | `PENDING-OFTPLUS` (test 1 gap-fill) | 0 | — | same |
+| OFT+, clean instructions | 80.5 (test 1 gap-fill; +0.1 on the affected tasks) | 0 | — | same |
 
 All of these used our eval kit (`eval_tasks.py`): first initial state, 10 settling steps, max steps
 220/280/300/520 (spatial/object/goal/10), one trial per task, official instructions, the LIBERO-Plus container
@@ -86,13 +86,14 @@ with MuJoCo 3.2.0.
     ~30), except TurboVLA-clean vs OFT+-clean (about 1 pt).
 - **Cheap alternative (≈ 0.7 GPU-h):** rerun 500 tasks of OFT+ with `ENV_SEED=7` and compare with its seed-0 run. That
   measures the seed's actual effect (flip rate and net shift), so the caveat can be stated with a number instead of
-  hand-waving. Recommended if any comparison in the report relies on OFT-vs-seed-7 pairing. **Submitted 2026-11-21** (`experiments/robustness/gapfill_oftplus.sh`, `lp_seed7_oftplus`): `PENDING-OFTPLUS`.
+  hand-waving. Recommended if any comparison in the report relies on OFT-vs-seed-7 pairing. **Done 2026-11-21** (`experiments/robustness/gapfill_oftplus.sh`, `lp_seed7_oftplus`): 81.4 → 82.6 (+1.2, 13 / 19
+  flips, p ≈ 0.38). The seed adds per-task noise but no significant shift.
 
 ## 7. Cost and order
 1. **Data and protocol request** to the teammates. Now; no GPU.
 2. **Compatibility grade** (A/B) from their answers.
 3. **SmolVLA latency job:** ≈ 0.5 GPU-h, once their environment path is known.
-4. **Optional:** the OFT+ seed-7 check (≈ 0.7 GPU-h; submitted 2026-11-21).
+4. **Optional:** the OFT+ seed-7 check (≈ 0.7 GPU-h). Done 2026-11-21: no significant effect.
 5. **Optional:** SmolVLA through our kit (≈ 12–15 GPU-h per arm), only if grade B and the comparison matters.
 
 Steps 1–3 can finish within a day of the team's runs completing. The core cost is ≈ 0.5 GPU-h plus the data.

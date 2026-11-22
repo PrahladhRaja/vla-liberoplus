@@ -32,9 +32,10 @@ Eval logs, server logs and videos stay on Turing.
 | Test 1: TurboVLA fine-tuned, clean (+ rerun) | 8,493 affected (+ 200) | `results/robustness/lp_t1_turbovla_{clean,rerun}/` | `~/lp_t1_turbovla_{clean,rerun}/` | 2499712, 2499715, 2502525/6 |
 | Test 1: TurboVLA released, clean (+ rerun) | 1,000 (+ 200) | `results/robustness/lp_t1_turbovlaR_{clean,rerun}/` | same names | 2502776/7 |
 | Test 1: OpenVLA-OFT, clean (+ rerun) | 1,000 (+ 200), merged | `results/robustness/lp_t1_oftL_{clean,rerun}/` | same names (+ per-suite dirs) | 2502791–98 |
-| Test 1: OFT+, clean A + B (+ rerun) | 1,000 + 7,493 (+ 200) | `PENDING-OFTPLUS` | `~/lp_t1_oftplus_clean`, `~/lp_t1_oftplus_cleanB`, `~/lp_t1_oftplus_rerun` | 2563982, 2564221/2, 2563983 |
-| OFT+ env seed 7 check | 500 tasks | `PENDING-OFTPLUS` | `~/lp_seed7_oftplus` | 2563984 |
+| Test 1: OFT+, clean A + B (+ rerun) | 1,000 + 7,493 (+ 200) | `results/robustness/lp_t1_oftplus_{clean,cleanB,rerun}/` (`gapfill_analysis.sh` merges A + B) | `~/lp_t1_oftplus_clean`, `~/lp_t1_oftplus_cleanB`, `~/lp_t1_oftplus_rerun` | 2563982, 2564221/2, 2563983 |
+| OFT+ env seed 7 check | 500 tasks | `results/robustness/lp_seed7_oftplus/` | `~/lp_seed7_oftplus` | 2563984 |
 | Test 1 comparisons | paired tables | `results/robustness/t1_analysis.txt` | `~/robustness_tests/t1_analysis.txt` | — |
+| OFT+ gap-fill comparisons | paired tables, full-benchmark clean estimates | `results/robustness/gapfill_analysis.txt` | `~/robustness_tests/gapfill_analysis.txt` | — |
 | Job-ID lists | | `results/robustness/*.env`, `results/oft/oftL_jobs.env` | `~/robustness_tests/`, `~/oft_container/` | — |
 
 ## 2. Reports and notes

@@ -7,8 +7,8 @@ All runs are on WPI Turing A30 GPUs unless marked otherwise. Success rates are p
 - **Env seeds:** 7 for TurboVLA, 0 for the OFT models, which makes OFT-vs-TurboVLA per-task pairing approximate
   (see GAPS.md).
 
-Each section names its source, as a path in this repo. Values marked `PENDING-OFTPLUS` are filled in from the OFT+
-gap-fill runs (`experiments/robustness/gapfill_analysis.sh`).
+Each section names its source, as a path in this repo. OFT+ clean-instruction and seed-7 values come from the
+gap-fill runs (`experiments/robustness/gapfill_analysis.sh`, output `results/robustness/gapfill_analysis.txt`).
 
 ---
 
@@ -16,7 +16,7 @@ gap-fill runs (`experiments/robustness/gapfill_analysis.sh`).
 | Model | Params | LIBERO-Plus (official) | LIBERO-Plus (clean instr.) | Standard LIBERO | Latency per query | Actions per query | **Per executed action** | Peak GPU mem |
 |---|---|---|---|---|---|---|---|---|
 | OpenVLA-OFT (LIBERO-trained) | 7.5B | 68.7 | +3.0 on 1,000 tasks (only measured there) | 96.1 | 139.6 ms | 8 | 17.5 ms | ~15 GB |
-| OpenVLA-OFT+ (released, LIBERO-Plus-trained) | 7.5B | **80.5** | `PENDING-OFTPLUS` | 96.6 | 143.3 ms | 8 | 17.9 ms | ~15 GB |
+| OpenVLA-OFT+ (released, LIBERO-Plus-trained) | 7.5B | **80.5** | **80.5** (unchanged; +0.1 on the affected tasks) | 96.6 | 143.3 ms | 8 | 17.9 ms | ~15 GB |
 | TurboVLA (released) | 216M | 45.5 | +15.1 on 1,000 tasks (only measured there) | 93.8 | ≈ 30.7 ms (same architecture) | 12 | ≈ 2.6 ms | 0.43 GB |
 | **TurboVLA fine-tuned on LIBERO-Plus (ours)** | 216M | **68.9** | **≈ 82.1** | **96.5** | **30.7 ms** | 12 | **2.56 ms** | **0.43 GB** |
 
@@ -27,7 +27,7 @@ Notes:
     RTX 4090.
 - **Clean-instruction full-benchmark values** are clean results on the 8,493 affected tasks plus the unchanged
   Language category.
-  - OFT+'s clean-instruction run (all 8,493 affected tasks) was submitted on 2026-11-21: `PENDING-OFTPLUS`.
+  - OFT+ was run with clean instructions on all 8,493 affected tasks (2026-11-21).
 - **Latency:** batch 1, end to end, on an A30.
   - The OFT+ figure is the controlled benchmark (job 2430342): 143.3 ms, with the LLM taking 100.0 and vision 27.8.
     A later benchmark measured 141.7 ms (17.7 ms per action). Pick one and use it consistently.
@@ -130,7 +130,7 @@ scores 69.0 vs 69.5 for the final step 17,500 (+0.4 ±1.3, not significant). Sou
 |---|---|---|---|---|---|
 | TurboVLA fine-tuned | 8,493 affected | 68.2 → **83.7 (+15.6)** | 233 / 1,554 | 5e-214 | 4 / 4 flips |
 | TurboVLA released | first 1,000 affected | 44.2 → 59.3 (+15.1) | 49 / 200 | 2e-21 | 3 / 4 |
-| OpenVLA-OFT+ | 8,493 affected | `PENDING-OFTPLUS` | | | 3 / 3 |
+| OpenVLA-OFT+ | 8,493 affected | 79.6 → 79.6 (+0.1) | 310 / 315 | 0.87 | 3 / 3 |
 | OpenVLA-OFT (LIBERO-trained) | first 1,000 affected | 67.1 → 70.1 (+3.0); Camera +13.1 | 48 / 78 | 0.01 | 2 / 2 |
 
 Fine-tuned TurboVLA (8,493 tasks):
@@ -141,7 +141,8 @@ Fine-tuned TurboVLA (8,493 tasks):
 - TurboVLA's BERT text encoder reads at most 21 tokens. Clean instructions are 6–21 tokens long, so the codes
   displace real words. They still reach the model in 7,820 of the 8,493 affected tasks.
 - OFT reads the whole prompt but largely ignores language. The LIBERO-trained OFT reacts somewhat (+3.0, mostly
-  Camera). The LIBERO-Plus-trained OFT+: `PENDING-OFTPLUS`.
+  Camera). The LIBERO-Plus-trained OFT+ does not react at all (+0.1, no category significant), so ignoring the
+  codes is partly learned.
 
 **Fine-tuning gain is not an artefact of the leak:** on the same 1,000 tasks it is +26.7 with official instructions
 and +27.5 with clean ones. The leak costs the released and fine-tuned models alike (+15.1 vs +15.9).
@@ -150,11 +151,15 @@ and +27.5 with clean ones. The leak costs the released and fine-tuned models ali
 
 | Model | Camera | Robot | Language | Light | Background | Noise | Layout | **All** |
 |---|---|---|---|---|---|---|---|---|
-| OFT+ | `PENDING-OFTPLUS` | | | | | | | |
+| OFT+ | 95.8 | 27.5 | 85.7 | 95.8 | 96.9 | 95.2 | 74.9 | **80.5** |
 | TurboVLA fine-tuned | 92.2 | **53.8** | 73.1 | 95.3 | 95.1 | 96.3 | 75.4 | **82.1** |
-| TurboVLA − OFT+ | `PENDING-OFTPLUS` | | | | | | | |
+| TurboVLA − OFT+ | −3.6* | **+26.3*** | −12.6* | −0.5 | −1.9* | +1.1 | +0.5 | **+1.5*** |
 
-Paired tests per category: `PENDING-OFTPLUS` (`gapfill_summary.py`).
+\* Significant (McNemar, paired on all 10,030 tasks; `gapfill_summary.py`). p ≈ 1e-5 (Camera), 2e-69 (Robot), 9e-28
+(Language), 0.02 (Background), 1e-4 (All; 703 / 858 flips).
+- **On the 8,493 affected tasks alone,** TurboVLA leads 83.7 vs 79.6 (+4.1, p ≈ 7e-23).
+- **Env seed:** OFT+ ran with seed 0 and TurboVLA with seed 7. An OFT+ seed-7 rerun of 500 tasks gave 81.4 → 82.6
+  (+1.2, 13 / 19 flips, p ≈ 0.38), so the seed doesn't drive this comparison.
 
 **Independent confirmation:** a teammate saw the same effect with SmolVLA. See also LIBERO-Plus GitHub issue #64,
 which misses the Robot category.

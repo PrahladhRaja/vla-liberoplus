@@ -87,8 +87,8 @@ Source: `cluster/eval_kit/README.md`, `cluster/eval_kit/eval_tasks.py`.
   affected tasks map to exactly 1 of 40 strings. Language-category tasks stay unchanged.
 - **Pairing:** each clean run is paired with that model's official run (same seed and start state), and a 200-task
   same-seed official rerun measures noise.
-- **Hypotheses were fixed before running.** TurboVLA gains ≥ 3 pts (confirmed: +15.6); OFT is insensitive (not for the original OFT at +3.0;
-  OFT+: `PENDING-OFTPLUS`).
+- **Hypotheses were fixed before running.** TurboVLA gains ≥ 3 pts (confirmed: +15.6); OFT is insensitive (holds for OFT+ at +0.1;
+  fails for the original OFT at +3.0).
 - **Stages:**
   - stage A: the first 1,000 affected tasks for every model;
   - stage B: all 8,493 affected tasks, for fine-tuned TurboVLA and OFT+.

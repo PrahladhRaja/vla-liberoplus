@@ -1,7 +1,7 @@
 # Test 1: how much do leaked perturbation IDs in the instruction cost each model?
 
-**Status:** done for TurboVLA (fine-tuned and released) and the original OpenVLA-OFT (2026-11-11). OpenVLA-OFT+
-gap-fill runs submitted 2026-11-21 (`PENDING-OFTPLUS`). Planned 2026-11-09; separate from test 2
+**Status:** done for TurboVLA (fine-tuned and released) and the original OpenVLA-OFT (2026-11-11), and for
+OpenVLA-OFT+ (gap-fill runs, 2026-11-21). Planned 2026-11-09; separate from test 2
 (`PLAN_test2_deblur_frontend.md`).
 
 **Models:**
@@ -110,7 +110,7 @@ OFT+, `gapfill_analysis.txt`.
 | TurboVLA fine-tuned | 70.9 → **86.8 (+15.9)** | 26 / 185 | p ≈ 1e-27 | 72.5 → 72.5 (4 / 4 flips) |
 | TurboVLA released | 44.2 → 59.3 (+15.1) | 49 / 200 | p ≈ 2e-21 | 3 / 4 flips |
 | OpenVLA-OFT (LIBERO-trained) | 67.1 → 70.1 (+3.0) | 48 / 78 | p ≈ 0.01 | 2 / 2 flips |
-| OpenVLA-OFT+ | `PENDING-OFTPLUS` | `PENDING-OFTPLUS` | `PENDING-OFTPLUS` | 83.0 → 83.0 (3 / 3 flips) |
+| OpenVLA-OFT+ | 81.7 → 81.7 (+0.0) | 32 / 32 | p ≈ 1 | 83.0 → 83.0 (3 / 3 flips) |
 
 - **Fine-tuned TurboVLA by category** (all significant): Camera +18.5, Robot +19.2, Light +11.4, Background +11.4,
   Noise +22.8, Layout +12.0.
@@ -125,15 +125,21 @@ OFT+, `gapfill_analysis.txt`.
 | Model | Affected tasks, official → clean | Flips | p | Full-benchmark estimate* |
 |---|---|---|---|---|
 | TurboVLA fine-tuned | 68.2 → **83.7 (+15.6)** | 233 / 1,554 | 5e-214 | 68.9 → **82.1** |
-| OpenVLA-OFT+ | `PENDING-OFTPLUS` | | | 80.5 → `PENDING-OFTPLUS` |
+| OpenVLA-OFT+ | 79.6 → 79.6 (+0.1) | 310 / 315 | 0.87 | 80.5 → 80.5 |
 
 \* Clean affected results + the unchanged Language category.
 
 - **Fine-tuned TurboVLA by category:** Camera +19.7, Robot +13.5, Light +10.2, Background +14.3, Noise +23.2,
   Layout +10.1 (all p < 1e-19).
 - **By suite:** spatial +12.9, object +6.2, goal +36.8, libero_10 +5.9.
-- **Fine-tuned TurboVLA clean vs OFT+ clean:** `PENDING-OFTPLUS`.
+- **OFT+ by category:** no significant change in any category (largest: Robot −1.3, p ≈ 0.15).
+- **Fine-tuned TurboVLA clean vs OFT+ clean** (paired, all 10,030 tasks): 82.1 vs 80.5, **+1.5 (p ≈ 1e-4)**.
+  - Robot +26.3, Camera −3.6, Language −12.6, Background −1.9 (all significant).
+  - Light, Noise and Layout within ±1.1 (not significant).
+  - On the affected tasks alone: 83.7 vs 79.6 (+4.1, p ≈ 7e-23).
+- **Env seed check:** OFT+ with seed 7 instead of 0, 500 tasks: 81.4 → 82.6 (+1.2, 13 / 19 flips, p ≈ 0.38).
 
 **Verdicts:**
 - **H1 (TurboVLA gains):** confirmed at full scale.
-- **H2 (OFT insensitive):** fails for the original LIBERO-trained OFT (+3.0, mostly Camera). OFT+: `PENDING-OFTPLUS`.
+- **H2 (OFT insensitive):** fails for the original LIBERO-trained OFT (+3.0, mostly Camera). OFT+: holds (+0.1, p ≈ 0.87), so insensitivity to the codes is partly learned
+  through LIBERO-Plus training.

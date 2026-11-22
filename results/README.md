@@ -17,7 +17,7 @@ Per-task results of every in-scope run. Each eval-kit run folder keeps four file
 |---|---|
 | `turbovla/` | released (`lp_eval_full`) and fine-tuned (`lp_eval_ft`) on LIBERO-Plus; step-10k checkpoint (`lp_eval_ck10000`, 3,011 tasks); standard LIBERO (`libero_std/`, one JSON per suite half); 29-task Turing checks (`test28/`); fine-tuning run report and data statistics (`finetune_run/`); written reports (`reports/`) |
 | `oft/` | OpenVLA-OFT+ (`lp_eval_oftplus`), original OpenVLA-OFT per suite (`lp_eval_oftL_<suite>`, merge with `cluster/oft_container/oftL_merge.sh`), standard-LIBERO eval output (`libero_std/`), latency benchmark JSON |
-| `robustness/` | test 1 (instruction leak): clean-instruction and same-seed rerun runs per model, `t1_analysis.txt`, job IDs; OFT+ gap-fill runs `PENDING-OFTPLUS` |
+| `robustness/` | test 1 (instruction leak): clean-instruction and same-seed rerun runs per model, `t1_analysis.txt`, job IDs; OFT+ gap-fill runs: clean instructions stage A (`lp_t1_oftplus_clean`) and B (`lp_t1_oftplus_cleanB`), rerun (`lp_t1_oftplus_rerun`), env seed 7 (`lp_seed7_oftplus`), `gapfill_analysis.txt`, `gapfill_jobs.env` |
 | `desktop/` | released TurboVLA on standard LIBERO, run on the desktop (cross-check of the Turing numbers) |
 
 The desktop LIBERO-Plus run of released TurboVLA is in `cluster/eval_kit_desktop/reference/`.

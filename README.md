@@ -13,7 +13,7 @@ background, image noise and object layout.
 | Model | Params | LIBERO-Plus (official) | LIBERO-Plus (clean instructions) | Standard LIBERO | Per executed action (A30) |
 |---|---|---|---|---|---|
 | OpenVLA-OFT (LIBERO-trained) | 7.5B | 68.7 | +3.0 on 1,000 tasks | 96.1 | 17.5 ms |
-| OpenVLA-OFT+ (LIBERO-Plus-trained) | 7.5B | 80.5 | `PENDING-OFTPLUS` | 96.6 | 17.9 ms |
+| OpenVLA-OFT+ (LIBERO-Plus-trained) | 7.5B | 80.5 | 80.5 (+0.1 on the affected tasks) | 96.6 | 17.9 ms |
 | TurboVLA (released) | 216M | 45.5 | +15.1 on 1,000 tasks | 93.8 | ≈ 2.6 ms |
 | **TurboVLA fine-tuned on LIBERO-Plus (ours)** | 216M | **68.9** | **≈ 82.1** | **96.5** | **2.56 ms** |
 

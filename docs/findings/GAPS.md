@@ -3,11 +3,11 @@
 ## Caveats to state in the presentation
 1. **Clean instructions are our reconstruction**, not an official LIBERO-Plus protocol. Report official numbers as
    the results and clean numbers as a labelled diagnostic.
-2. **OFT+ clean-instruction numbers come from runs submitted on 2026-11-21** (all 8,493 affected tasks):
-   `PENDING-OFTPLUS`.
+2. **OFT+ clean-instruction numbers come from OFT+ itself** (all 8,493 affected tasks, 2026-11-21): +0.1, not
+   significant.
 3. **Different env seeds:** 7 for TurboVLA, 0 for OFT. Aggregate rates are unaffected; per-task OFT-vs-TurboVLA
-   pairing is approximate. A 500-task OFT+ rerun with seed 7 (submitted 2026-11-21) puts a number on it:
-   `PENDING-OFTPLUS`.
+   pairing is approximate. A 500-task OFT+ rerun with seed 7 puts a number on it: 81.4 → 82.6
+   (+1.2, 13 / 19 flips, p ≈ 0.38, not significant).
 4. **One trial per task.** Individual task outcomes are noisy: the same model on two simulator builds agreed on
    only 86.7 % of tasks. Use category or suite rates with paired tests.
 5. **Two OFT+ latency figures** (143.3 ms and 141.7 ms from two benchmarks). Pick one and use it throughout; the

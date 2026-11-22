@@ -1,0 +1,181 @@
+# OFT+ gap-fill analysis, Sat Nov 21 06:50:20 PM EST 2026
+  lp_t1_oftplus_clean: 1000/1000 tasks done
+  lp_t1_oftplus_cleanB: 7493/7493 tasks done
+  lp_t1_oftplus_clean_all: 8493/8493 tasks done
+  lp_t1_oftplus_rerun: 200/200 tasks done
+  lp_seed7_oftplus: 500/500 tasks done
+
+== 1a OFT+ same-seed official rerun vs official (rerun-noise floor, 200 tasks)   (new run: 200/200 tasks done)
+# LIBERO-Plus: baseline vs new model (paired, same tasks)
+
+- Baseline: `/home/<user>/lp_eval_oftplus` (10030 tasks); new: `/home/<user>/lp_t1_oftplus_rerun` (200 tasks); compared: 200 tasks.
+- Skipped after two hangs: baseline 0, new 0.
+
+## Success rate (%): baseline → new (Δ)
+
+| | Camera | Robot | Language | Light | Background | Noise | Layout | Total |
+|---|---|---|---|---|---|---|---|---|
+| libero_spatial | 88.9 → 100.0 (+11.1) | 11.1 → 0.0 (-11.1) | nan → nan (+nan) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | **82.4 → 82.4 (+0.0)** |
+| libero_object | 100.0 → 100.0 (+0.0) | 37.5 → 37.5 (+0.0) | nan → nan (+nan) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 75.0 → 75.0 (+0.0) | **86.3 → 86.3 (+0.0)** |
+| libero_goal | 100.0 → 100.0 (+0.0) | 50.0 → 75.0 (+25.0) | nan → nan (+nan) | 87.5 → 75.0 (-12.5) | 100.0 → 100.0 (+0.0) | 87.5 → 87.5 (+0.0) | 55.6 → 44.4 (-11.1) | **79.6 → 79.6 (+0.0)** |
+| libero_10 | 100.0 → 100.0 (+0.0) | 50.0 → 50.0 (+0.0) | nan → nan (+nan) | 100.0 → 100.0 (+0.0) | 77.8 → 77.8 (+0.0) | 100.0 → 100.0 (+0.0) | 75.0 → 75.0 (+0.0) | **83.7 → 83.7 (+0.0)** |
+| all suites | 97.1 → 100.0 (+2.9) | 36.4 → 39.4 (+3.0) | nan → nan (+nan) | 96.9 → 93.8 (-3.1) | 94.1 → 94.1 (+0.0) | 97.0 → 97.0 (+0.0) | 76.5 → 73.5 (-2.9) | **83.0 → 83.0 (+0.0)** |
+
+## Which tasks changed
+
+| Category | tasks | baseline only | new only | net | test |
+|---|---|---|---|---|---|
+| Camera | 34 | 0 | 1 | +1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| Robot | 33 | 1 | 2 | +1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| Language | 0 | 0 | 0 | +0 | no differing tasks |
+| Light | 32 | 1 | 0 | -1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| Background | 34 | 0 | 0 | +0 | no differing tasks |
+| Noise | 33 | 0 | 0 | +0 | no differing tasks |
+| Layout | 34 | 1 | 0 | -1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| **all** | 200 | 3 | 3 | +0 | McNemar z = -0.41, p ≈ 1 (not significant at 5%) |
+
+'baseline only' = solved by the baseline but not the new model; 'new only' = the reverse. For reference, the same released model run on the desktop vs Turing differed on ~13% of tasks (6.2% / 7.1% each way), so per-task flips at that level are noise; the paired test accounts for this.
+
+== 1b OFT+ clean vs official, stage A (first 1,000 affected)   (new run: 1000/1000 tasks done)
+# LIBERO-Plus: baseline vs new model (paired, same tasks)
+
+- Baseline: `/home/<user>/lp_eval_oftplus` (10030 tasks); new: `/home/<user>/lp_t1_oftplus_clean` (1000 tasks); compared: 1000 tasks.
+- Skipped after two hangs: baseline 0, new 0.
+
+## Success rate (%): baseline → new (Δ)
+
+| | Camera | Robot | Language | Light | Background | Noise | Layout | Total |
+|---|---|---|---|---|---|---|---|---|
+| libero_spatial | 95.2 → 97.6 (+2.4) | 16.7 → 23.8 (+7.1) | nan → nan (+nan) | 97.6 → 95.2 (-2.4) | 97.6 → 95.1 (-2.4) | 92.7 → 97.6 (+4.9) | 95.1 → 97.6 (+2.4) | **82.3 → 84.3 (+2.0)** |
+| libero_object | 95.2 → 97.6 (+2.4) | 23.8 → 19.0 (-4.8) | nan → nan (+nan) | 100.0 → 97.6 (-2.4) | 100.0 → 97.6 (-2.4) | 97.6 → 100.0 (+2.4) | 83.3 → 85.7 (+2.4) | **83.3 → 82.9 (-0.4)** |
+| libero_goal | 100.0 → 97.6 (-2.4) | 19.5 → 24.4 (+4.9) | nan → nan (+nan) | 90.5 → 95.2 (+4.8) | 97.6 → 100.0 (+2.4) | 97.6 → 97.6 (+0.0) | 53.7 → 51.2 (-2.4) | **76.7 → 77.9 (+1.2)** |
+| libero_10 | 97.6 → 92.9 (-4.8) | 47.6 → 45.2 (-2.4) | nan → nan (+nan) | 95.1 → 85.4 (-9.8) | 92.9 → 95.2 (+2.4) | 97.6 → 90.5 (-7.1) | 76.2 → 81.0 (+4.8) | **84.5 → 81.7 (-2.8)** |
+| all suites | 97.0 → 96.4 (-0.6) | 26.9 → 28.1 (+1.2) | nan → nan (+nan) | 95.8 → 93.4 (-2.4) | 97.0 → 97.0 (+0.0) | 96.4 → 96.4 (+0.0) | 77.1 → 78.9 (+1.8) | **81.7 → 81.7 (+0.0)** |
+
+## Which tasks changed
+
+| Category | tasks | baseline only | new only | net | test |
+|---|---|---|---|---|---|
+| Camera | 168 | 6 | 5 | -1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| Robot | 167 | 6 | 8 | +2 | McNemar z = 0.27, p ≈ 0.789 (not significant at 5%) |
+| Language | 0 | 0 | 0 | +0 | no differing tasks |
+| Light | 166 | 8 | 4 | -4 | McNemar z = 0.87, p ≈ 0.386 (not significant at 5%) |
+| Background | 166 | 2 | 2 | +0 | McNemar z = -0.50, p ≈ 1 (not significant at 5%) |
+| Noise | 167 | 6 | 6 | +0 | McNemar z = -0.29, p ≈ 1 (not significant at 5%) |
+| Layout | 166 | 4 | 7 | +3 | McNemar z = 0.60, p ≈ 0.546 (not significant at 5%) |
+| **all** | 1000 | 32 | 32 | +0 | McNemar z = -0.12, p ≈ 1 (not significant at 5%) |
+
+'baseline only' = solved by the baseline but not the new model; 'new only' = the reverse. For reference, the same released model run on the desktop vs Turing differed on ~13% of tasks (6.2% / 7.1% each way), so per-task flips at that level are noise; the paired test accounts for this.
+
+== 1c OFT+ clean vs official, all 8,493 affected   (new run: 8493/8493 tasks done)
+# LIBERO-Plus: baseline vs new model (paired, same tasks)
+
+- Baseline: `/home/<user>/lp_eval_oftplus` (10030 tasks); new: `/home/<user>/lp_t1_oftplus_clean_all` (8493 tasks); compared: 8493 tasks.
+- Skipped after two hangs: baseline 0, new 0.
+
+## Success rate (%): baseline → new (Δ)
+
+| | Camera | Robot | Language | Light | Background | Noise | Layout | Total |
+|---|---|---|---|---|---|---|---|---|
+| libero_spatial | 97.6 → 97.6 (+0.0) | 30.0 → 30.6 (+0.6) | nan → nan (+nan) | 98.3 → 97.6 (-0.7) | 95.3 → 96.9 (+1.6) | 86.9 → 93.2 (+6.3) | 96.1 → 93.2 (-2.9) | **83.5 → 84.2 (+0.7)** |
+| libero_object | 98.7 → 99.0 (+0.3) | 24.1 → 21.4 (-2.8) | nan → nan (+nan) | 99.3 → 99.3 (+0.0) | 98.8 → 98.4 (-0.4) | 98.3 → 98.6 (+0.2) | 77.4 → 77.7 (+0.2) | **81.1 → 80.6 (-0.4)** |
+| libero_goal | 97.3 → 96.1 (-1.2) | 21.8 → 21.3 (-0.5) | nan → nan (+nan) | 91.8 → 96.1 (+4.3) | 98.6 → 100.0 (+1.4) | 98.7 → 97.9 (-0.8) | 55.5 → 55.5 (+0.0) | **74.7 → 75.0 (+0.3)** |
+| libero_10 | 88.1 → 90.9 (+2.9) | 39.9 → 37.7 (-2.3) | nan → nan (+nan) | 89.4 → 89.8 (+0.4) | 93.1 → 92.7 (-0.3) | 94.7 → 91.3 (-3.3) | 73.4 → 75.0 (+1.6) | **79.3 → 79.0 (-0.3)** |
+| all suites | 95.3 → 95.8 (+0.5) | 28.8 → 27.5 (-1.3) | nan → nan (+nan) | 94.8 → 95.8 (+1.0) | 96.4 → 96.9 (+0.6) | 94.9 → 95.2 (+0.3) | 75.2 → 74.9 (-0.3) | **79.6 → 79.6 (+0.1)** |
+
+## Which tasks changed
+
+| Category | tasks | baseline only | new only | net | test |
+|---|---|---|---|---|---|
+| Camera | 1599 | 58 | 66 | +8 | McNemar z = 0.63, p ≈ 0.53 (not significant at 5%) |
+| Robot | 1550 | 98 | 78 | -20 | McNemar z = 1.43, p ≈ 0.152 (not significant at 5%) |
+| Language | 0 | 0 | 0 | +0 | no differing tasks |
+| Light | 1142 | 21 | 32 | +11 | McNemar z = 1.37, p ≈ 0.17 (not significant at 5%) |
+| Background | 1076 | 20 | 26 | +6 | McNemar z = 0.74, p ≈ 0.461 (not significant at 5%) |
+| Noise | 1601 | 58 | 63 | +5 | McNemar z = 0.36, p ≈ 0.716 (not significant at 5%) |
+| Layout | 1525 | 55 | 50 | -5 | McNemar z = 0.39, p ≈ 0.696 (not significant at 5%) |
+| **all** | 8493 | 310 | 315 | +5 | McNemar z = 0.16, p ≈ 0.873 (not significant at 5%) |
+
+'baseline only' = solved by the baseline but not the new model; 'new only' = the reverse. For reference, the same released model run on the desktop vs Turing differed on ~13% of tasks (6.2% / 7.1% each way), so per-task flips at that level are noise; the paired test accounts for this.
+
+== 1d TurboVLA fine-tuned clean vs OFT+ clean (affected tasks)   (new run: 8493/8493 tasks done)
+# LIBERO-Plus: baseline vs new model (paired, same tasks)
+
+- Baseline: `/home/<user>/lp_t1_oftplus_clean_all` (8493 tasks); new: `/home/<user>/lp_t1_turbovla_clean` (8493 tasks); compared: 8493 tasks.
+- Skipped after two hangs: baseline 0, new 0.
+
+## Success rate (%): baseline → new (Δ)
+
+| | Camera | Robot | Language | Light | Background | Noise | Layout | Total |
+|---|---|---|---|---|---|---|---|---|
+| libero_spatial | 97.6 → 93.9 (-3.7) | 30.6 → 59.1 (+28.6) | nan → nan (+nan) | 97.6 → 95.9 (-1.7) | 96.9 → 98.1 (+1.2) | 93.2 → 96.0 (+2.8) | 93.2 → 82.9 (-10.4) | **84.2 → 86.9 (+2.7)** |
+| libero_object | 99.0 → 99.5 (+0.5) | 21.4 → 53.8 (+32.4) | nan → nan (+nan) | 99.3 → 100.0 (+0.7) | 98.4 → 99.6 (+1.2) | 98.6 → 99.5 (+0.9) | 77.7 → 80.1 (+2.5) | **80.6 → 87.6 (+6.9)** |
+| libero_goal | 96.1 → 93.6 (-2.5) | 21.3 → 39.9 (+18.6) | nan → nan (+nan) | 96.1 → 91.4 (-4.7) | 100.0 → 97.2 (-2.8) | 97.9 → 97.1 (-0.8) | 55.5 → 62.8 (+7.3) | **75.0 → 78.3 (+3.3)** |
+| libero_10 | 90.9 → 82.6 (-8.4) | 37.7 → 63.6 (+26.0) | nan → nan (+nan) | 89.8 → 93.4 (+3.6) | 92.7 → 86.5 (-6.2) | 91.3 → 92.7 (+1.3) | 75.0 → 77.2 (+2.2) | **79.0 → 82.4 (+3.4)** |
+| all suites | 95.8 → 92.2 (-3.6) | 27.5 → 53.8 (+26.3) | nan → nan (+nan) | 95.8 → 95.3 (-0.5) | 96.9 → 95.1 (-1.9) | 95.2 → 96.3 (+1.1) | 74.9 → 75.4 (+0.5) | **79.6 → 83.7 (+4.1)** |
+
+## Which tasks changed
+
+| Category | tasks | baseline only | new only | net | test |
+|---|---|---|---|---|---|
+| Camera | 1599 | 112 | 55 | -57 | McNemar z = 4.33, p ≈ 1.47e-05 (significant at 5%) |
+| Robot | 1550 | 62 | 469 | +407 | McNemar z = 17.62, p ≈ 1.76e-69 (significant at 5%) |
+| Language | 0 | 0 | 0 | +0 | no differing tasks |
+| Light | 1142 | 54 | 48 | -6 | McNemar z = 0.50, p ≈ 0.621 (not significant at 5%) |
+| Background | 1076 | 43 | 23 | -20 | McNemar z = 2.34, p ≈ 0.0193 (significant at 5%) |
+| Noise | 1601 | 53 | 70 | +17 | McNemar z = 1.44, p ≈ 0.149 (not significant at 5%) |
+| Layout | 1525 | 126 | 134 | +8 | McNemar z = 0.43, p ≈ 0.664 (not significant at 5%) |
+| **all** | 8493 | 450 | 799 | +349 | McNemar z = 9.85, p ≈ 7.07e-23 (significant at 5%) |
+
+'baseline only' = solved by the baseline but not the new model; 'new only' = the reverse. For reference, the same released model run on the desktop vs Turing differed on ~13% of tasks (6.2% / 7.1% each way), so per-task flips at that level are noise; the paired test accounts for this.
+
+== 2  OFT+ env seed 7 vs seed 0, official (first 500 plan rows)   (new run: 500/500 tasks done)
+# LIBERO-Plus: baseline vs new model (paired, same tasks)
+
+- Baseline: `/home/<user>/lp_eval_oftplus` (10030 tasks); new: `/home/<user>/lp_seed7_oftplus` (500 tasks); compared: 500 tasks.
+- Skipped after two hangs: baseline 0, new 0.
+
+## Success rate (%): baseline → new (Δ)
+
+| | Camera | Robot | Language | Light | Background | Noise | Layout | Total |
+|---|---|---|---|---|---|---|---|---|
+| libero_spatial | 88.9 → 100.0 (+11.1) | 16.7 → 27.8 (+11.1) | 83.3 → 88.9 (+5.6) | 100.0 → 94.1 (-5.9) | 94.4 → 100.0 (+5.6) | 83.3 → 94.4 (+11.1) | 94.4 → 88.9 (-5.6) | **80.0 → 84.8 (+4.8)** |
+| libero_object | 94.4 → 94.4 (+0.0) | 27.8 → 27.8 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 100.0 → 100.0 (+0.0) | 77.8 → 77.8 (+0.0) | **85.7 → 85.7 (+0.0)** |
+| libero_goal | 100.0 → 100.0 (+0.0) | 35.3 → 41.2 (+5.9) | 61.1 → 55.6 (-5.6) | 94.1 → 100.0 (+5.9) | 100.0 → 94.4 (-5.6) | 94.4 → 100.0 (+5.6) | 44.4 → 38.9 (-5.6) | **75.8 → 75.8 (+0.0)** |
+| libero_10 | 100.0 → 100.0 (+0.0) | 38.9 → 33.3 (-5.6) | 94.4 → 100.0 (+5.6) | 100.0 → 88.9 (-11.1) | 83.3 → 94.4 (+11.1) | 100.0 → 94.4 (-5.6) | 70.6 → 76.5 (+5.9) | **84.0 → 84.0 (+0.0)** |
+| all suites | 95.8 → 98.6 (+2.8) | 29.6 → 32.4 (+2.8) | 84.7 → 86.1 (+1.4) | 98.6 → 95.7 (-2.9) | 94.4 → 97.2 (+2.8) | 94.4 → 97.2 (+2.8) | 71.8 → 70.4 (-1.4) | **81.4 → 82.6 (+1.2)** |
+
+## Which tasks changed
+
+| Category | tasks | baseline only | new only | net | test |
+|---|---|---|---|---|---|
+| Camera | 72 | 0 | 2 | +2 | McNemar z = 0.71, p ≈ 0.48 (not significant at 5%) |
+| Robot | 71 | 2 | 4 | +2 | McNemar z = 0.41, p ≈ 0.683 (not significant at 5%) |
+| Language | 72 | 4 | 5 | +1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| Light | 70 | 3 | 1 | -2 | McNemar z = 0.50, p ≈ 0.617 (not significant at 5%) |
+| Background | 72 | 1 | 3 | +2 | McNemar z = 0.50, p ≈ 0.617 (not significant at 5%) |
+| Noise | 72 | 1 | 3 | +2 | McNemar z = 0.50, p ≈ 0.617 (not significant at 5%) |
+| Layout | 71 | 2 | 1 | -1 | McNemar z = 0.00, p ≈ 1 (not significant at 5%) |
+| **all** | 500 | 13 | 19 | +6 | McNemar z = 0.88, p ≈ 0.377 (not significant at 5%) |
+
+'baseline only' = solved by the baseline but not the new model; 'new only' = the reverse. For reference, the same released model run on the desktop vs Turing differed on ~13% of tasks (6.2% / 7.1% each way), so per-task flips at that level are noise; the paired test accounts for this.
+
+== 3  Full-benchmark clean-instruction estimates
+OFT+: official 10030/10030 tasks, clean 8493/8493 affected tasks
+TurboVLA fine-tuned: official 10030/10030 tasks, clean 8493/8493 affected tasks
+
+Full-benchmark estimate, clean instructions (Language official), success %:
+| Model | Camera | Robot | Language | Light | Background | Noise | Layout | All | n |
+|---|---|---|---|---|---|---|---|---|---|
+| OFT+ | 95.8 | 27.5 | 85.7 | 95.8 | 96.9 | 95.2 | 74.9 | 80.5 | 10030 |
+| TurboVLA fine-tuned | 92.2 | 53.8 | 73.1 | 95.3 | 95.1 | 96.3 | 75.4 | 82.1 | 10030 |
+
+Paired, TurboVLA fine-tuned vs OFT+ on 10030 tasks both have (clean estimate):
+  Camera_Viewpoints      n= 1599  OFT+  95.8  TurboVLA  92.2  diff  -3.6  flips OFT+only/TVonly 112/55  p=1.5e-05
+  Robot_Initial_States   n= 1550  OFT+  27.5  TurboVLA  53.8  diff +26.3  flips OFT+only/TVonly 62/469  p=1.8e-69
+  Language_Instructions  n= 1537  OFT+  85.7  TurboVLA  73.1  diff -12.6  flips OFT+only/TVonly 253/59  p=8.6e-28
+  Light_Conditions       n= 1142  OFT+  95.8  TurboVLA  95.3  diff  -0.5  flips OFT+only/TVonly 54/48  p=0.62
+  Background_Textures    n= 1076  OFT+  96.9  TurboVLA  95.1  diff  -1.9  flips OFT+only/TVonly 43/23  p=0.019
+  Sensor_Noise           n= 1601  OFT+  95.2  TurboVLA  96.3  diff  +1.1  flips OFT+only/TVonly 53/70  p=0.15
+  Objects_Layout         n= 1525  OFT+  74.9  TurboVLA  75.4  diff  +0.5  flips OFT+only/TVonly 126/134  p=0.66
+  all                    n=10030  OFT+  80.5  TurboVLA  82.1  diff  +1.5  flips OFT+only/TVonly 703/858  p=9.7e-05

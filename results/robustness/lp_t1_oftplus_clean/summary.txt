@@ -1,0 +1,27 @@
+Tasks evaluated: 1000/10030  (0 block, 1000 random-sample)
+
+Success rate % (± = 95% CI; values without ± are exact)
+
+                       Camera        Robot     Language        Light   Background        Noise       Layout        Total
+libero_spatial         97.6±4      23.8±12            -       95.2±6       95.1±6       97.6±4       97.6±4            -
+libero_object          97.6±4      19.0±11            -       97.6±4       97.6±4        100.0      85.7±10            -
+libero_goal            97.6±4      24.4±12            -       95.2±6        100.0       97.6±4      51.2±15            -
+libero_10              92.9±7      45.2±14            -      85.4±10       95.2±6       90.5±8      81.0±11            -
+all suites             96.4±3       28.2±6            -       93.5±3       97.0±2       96.2±3       78.1±5            -
+
+Episodes per cell (evaluated / cell size):
+
+                       Camera        Robot     Language        Light   Background        Noise       Layout
+libero_spatial         42/376       42/350        0/390       42/292       41/258       41/351       41/385
+libero_object          42/396       42/398        0/354       41/297       42/248       42/422       42/403
+libero_goal            42/408       41/409        0/410       42/279       41/281       42/379       41/425
+libero_10              42/419       42/393        0/383       41/274       42/289       42/449       42/312
+
+By difficulty level, all evaluated tasks (unweighted; indicative only; L? = no level in LIBERO-Plus):
+  Camera     L1: 100% (n=21)  L2: 100% (n=36)  L3: 97% (n=32)  L4: 90% (n=21)  L5: 95% (n=58)
+  Robot      L1: 80% (n=30)  L2: 34% (n=32)  L3: 20% (n=44)  L4: 13% (n=23)  L5: 0% (n=38)
+  Language   
+  Light      L1: 100% (n=11)  L2: 96% (n=27)  L3: 89% (n=38)  L4: 97% (n=35)  L5: 86% (n=37)  L?: 100% (n=18)
+  Background L1: 92% (n=39)  L2: 100% (n=38)  L3: 100% (n=41)  L4: 100% (n=32)  L5: 88% (n=16)
+  Noise      L1: 100% (n=16)  L2: 96% (n=57)  L3: 97% (n=34)  L4: 100% (n=38)  L5: 86% (n=22)
+  Layout     L1: 93% (n=42)  L2: 83% (n=24)  L3: 83% (n=48)  L4: 76% (n=21)  L5: 52% (n=31)
